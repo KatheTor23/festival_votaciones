@@ -35,7 +35,6 @@ Algunas funcionalidades pueden encontrarse en desarrollo.
 
 ## Estructura del proyecto
 
-
 festival_votaciones/
 ├── festival/
 │   ├── settings.py
@@ -55,7 +54,7 @@ festival_votaciones/
 │   └── urls.py
 ├── manage.py
 ├── requirements.txt
-
+└── README.md
 
 ## Instalación y ejecución
 
