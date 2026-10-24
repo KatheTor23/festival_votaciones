@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>Votaciones | Festival Vallenato</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #090E17;
+            color: #FFFFFF;
+        }
+
+        header {
+            background: #131D2D;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 2px solid #D6B46C;
+        }
+
+        header h1 {
+            color: #D6B46C;
+            margin: 0;
+        }
+
+        header p {
+            color: #B8C0CD;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: #D6B46C;
+        }
+
+        .tarjeta {
+            background: #131D2D;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #293548;
+        }
+
+        .tarjeta h3 {
+            color: #D6B46C;
+            font-size: 23px;
+            margin-top: 0;
+        }
+
+        .dato {
+            margin: 12px 0;
+            color: #E0E5ED;
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 8px 14px;
+            background: #293548;
+            color: #D6B46C;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .participantes {
+            margin-top: 25px;
+            border-top: 1px solid #354052;
+            padding-top: 15px;
+        }
+
+        .participantes h4 {
+            color: #D6B46C;
+        }
+
+        .participante {
+            background: #202C3F;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+        }
+
+        .mensaje {
+            text-align: center;
+            padding: 30px;
+            background: #131D2D;
+            border-radius: 10px;
+        }
+
+                
+        /* MENÚ DE NAVEGACIÓN */
+
+        nav {
+            margin-top: 22px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 9px 22px;
+            border-radius: 999px;
+            border: 1px solid #2a3a57;
+            background: rgba(24, 36, 56, 0.7);
+            box-shadow: 0 4px 0 #0a0f1a;
+            transition:
+                transform 0.15s,
+                box-shadow 0.15s,
+                border-color 0.15s;
+        }
+
+        nav a:hover {
+            border-color: #d6b46c;
+            color: #d6b46c;
+        }
+
+        nav a:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #0a0f1a;
+        }
+
+        nav a[aria-current="page"] {
+            background: #d6b46c;
+            color: #0b1220;
+            font-weight: 700;
+            border-color: #d6b46c;
+            box-shadow: 0 4px 0 #8a6d32;
+        }
+
+        /* Botón de cerrar sesión a la derecha */
+
+        .form-cerrar-sesion {
+            position: absolute;
+            right: 20px;
+            margin: 0;
+        }
+
+        .boton-salir {
+            background: transparent;
+            color: #f0dba5;
+            border: 1px solid #d6b46c;
+            border-radius: 999px;
+            padding: 9px 18px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .boton-salir:hover {
+            background: #d6b46c;
+            color: #0b1220;
+        }
+
+        /* Adaptación para celulares */
+
+        @media (max-width: 800px) {
+            .barra-navegacion {
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .form-cerrar-sesion {
+                position: static;
+            }
+        }
+
+        /* ==================================
+   HEADER - FESTIVAL VALLENATO
+================================== */
+
+.encabezado-festival {
+    background: linear-gradient(
+        180deg,
+        #17243a 0%,
+        #131d2d 100%
+    );
+
+    border-bottom: 3px solid #d6b46c;
+    padding: 32px 30px 22px;
+    color: #ffffff;
+}
+
+/* CONTENEDOR */
+
+.header-contenido {
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+/* TÍTULO */
+
+.header-titulo {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.header-titulo h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    color: #f0dba5;
+    font-size: clamp(28px, 4vw, 42px);
+    margin: 0 0 8px;
+}
+
+.header-titulo p {
+    color: #c5cbd6;
+    font-size: 15px;
+    margin: 0;
+}
+
+/* NAVEGACIÓN */
+
+.header-navegacion {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+}
+
+.menu-principal {
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.menu-principal a {
+    display: inline-block;
+    text-decoration: none;
+    color: #f0dba5;
+    border: 1px solid #d6b46c;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.menu-principal a:hover {
+    background: #d6b46c;
+    color: #0b1220;
+    transform: translateY(-2px);
+}
+
+/* USUARIO */
+
+.header-usuario {
+    grid-column: 3;
+    justify-self: end;
+}
+
+.header-usuario form {
+    margin: 0;
+}
+
+.boton-salir {
+    display: inline-block;
+    text-decoration: none;
+    background: transparent;
+    color: #f0dba5;
+    border: 1px solid #d6b46c;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.boton-salir:hover {
+    background: #d6b46c;
+    color: #0b1220;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+
+    .encabezado-festival {
+        padding: 28px 15px;
+    }
+
+    .header-navegacion {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .menu-principal {
+        justify-content: center;
+    }
+
+    .header-usuario {
+        align-self: center;
+    }
+
+    .menu-principal a,
+    .boton-salir {
+        padding: 9px 15px;
+        font-size: 13px;
+    }
+}
+    </style>
+    
+</head>
+
+<body>
+        
+
+<header class="encabezado-festival">
+    <div class="header-contenido">
+
+        <div class="header-titulo">
+            <h1>Festival de la Leyenda Vallenata</h1>
+            <p>Tradición, cultura y pasión por nuestro folclor</p>
+        </div>
+
+        <div class="header-navegacion">
+
+            <nav class="menu-principal">
+                <a href="{% url 'lista_ediciones' %}">
+                    Ediciones
+                </a>
+
+                <a href="{% url 'lista_categorias' %}">
+                    Categorías
+                </a>
+
+                <a href="{% url 'lista_votaciones' %}">
+                    Votaciones
+                </a>
+            </nav>
+
+            <div class="header-usuario">
+                {% if user.is_authenticated %}
+
+                    <form method="POST"
+                          action="{% url 'cerrar_sesion' %}">
+                        {% csrf_token %}
+
+                        <button type="submit"
+                                class="boton-salir">
+                            Cerrar sesión
+                        </button>
+                    </form>
+
+                {% else %}
+
+                    <a href="{% url 'iniciar_sesion' %}"
+                       class="boton-salir">
+                        Iniciar sesión
+                    </a>
+
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</header>
+
+    <main>
+
+        <h2>Votaciones registradas</h2>
+
+        {% for registro in registros %}
+
+            <div class="tarjeta">
+
+                <h3>
+                    {{ registro.votacion.categoria.nombre }}
+                </h3>
+
+                <p class="dato">
+                    <strong>Edición:</strong>
+                    {{ registro.votacion.categoria.edicion.anio }}
+                </p>
+
+                <p class="dato">
+                    <strong>Descripción:</strong>
+                    {{ registro.votacion.categoria.descripcion|default:"Sin descripción" }}
+                </p>
+
+                <p class="estado">
+                    Estado:
+                    {{ registro.votacion.get_estado_display }}
+                </p>
+
+                <p class="dato">
+                    <strong>Fecha de inicio:</strong>
+                    {{ registro.votacion.fecha_inicio|date:"d/m/Y H:i" }}
+                </p>
+
+                <p class="dato">
+                    <strong>Fecha de cierre:</strong>
+                    {{ registro.votacion.fecha_fin|date:"d/m/Y H:i" }}
+                </p>
+
+                <div class="participantes">
+
+                    <h4>Participantes</h4>
+
+                    {% for opcion in registro.participantes %}
+
+                        <div class="participante">
+                            {{ opcion.nombre_participante }}
+                        </div>
+
+                    {% empty %}
+
+                        <p>No hay participantes registrados.</p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <div class="mensaje">
+                <p>
+                    No hay votaciones registradas
+                    en la base de datos.
+                </p>
+            </div>
+
+        {% endfor %}
+
+    </main>
+
+</body>
+</html>

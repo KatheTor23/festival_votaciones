@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | Festival Vallenato</title>
+    <style>
+        body {
+            background: #090E17;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            color: #D6B46C;
+        }
+
+        a, button {
+            display: inline-block;
+            background: #D6B46C;
+            color: #090E17;
+            padding: 12px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Festival de la Leyenda Vallenata</h1>
+
+    {% if user.is_authenticated %}
+
+        <h2>¡Bienvenido, {{ user.username }}!</h2>
+        <p>Has iniciado sesión correctamente.</p>
+
+        <a href="/votaciones/">
+            Ver votaciones
+        </a>
+
+        <form method="POST" action="{% url 'cerrar_sesion' %}">
+            {% csrf_token %}
+            <button type="submit">Cerrar sesión</button>
+        </form>
+
+    {% else %}
+
+        <h2>Bienvenido al sistema</h2>
+
+        <a href="{% url 'registro' %}">
+            Registrarse
+        </a>
+
+        <a href="{% url 'iniciar_sesion' %}">
+            Iniciar sesión
+        </a>
+
+    {% endif %}
+
+</body>
+</html>

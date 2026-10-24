@@ -16,7 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import path, include
+from usuarios import views as usuarios_views
+
 
 urlpatterns = [
+    # Página principal del festival
+    path('', usuarios_views.inicio, name='inicio'),
+
+    # Usuarios
+    path('usuarios/', include('usuarios.urls')),
+
+    # Votaciones
+    path('votaciones/', include('votaciones.urls')),
+
+    # Ediciones y categorías
+    path('ediciones/', include('ediciones.urls')),
+    
+    # Administración
     path('admin/', admin.site.urls),
 ]
+

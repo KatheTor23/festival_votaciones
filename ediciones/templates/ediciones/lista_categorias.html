@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Categorías del Festival Vallenato</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fondo: #0b1220;
+            --fondo-2: #101a2d;
+            --cabecera: #131d2d;
+            --tarjeta: #182438;
+            --tarjeta-2: #1f2f4a;
+            --dorado: #d6b46c;
+            --dorado-oscuro: #8a6d32;
+            --dorado-claro: #f0dba5;
+            --texto: #ffffff;
+            --texto-suave: #c5cbd6;
+            --linea: #2a3a57;
+            --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+            --sans: "Nunito Sans", Arial, Helvetica, sans-serif;
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: var(--sans);
+            background:
+                radial-gradient(900px 500px at 15% -5%, rgba(214,180,108,.14), transparent 60%),
+                radial-gradient(800px 500px at 100% 30%, rgba(60,100,170,.18), transparent 60%),
+                var(--fondo);
+            background-attachment: fixed;
+            color: var(--texto);
+            line-height: 1.6;
+        }
+        a { color: var(--dorado); }
+        a:focus-visible, button:focus-visible, input:focus-visible {
+            outline: 2px solid var(--dorado);
+            outline-offset: 3px;
+        }
+
+        /* ---------- Encabezado ---------- */
+        header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #17243a 0%, var(--cabecera) 100%);
+            text-align: center;
+            padding: 56px 20px 44px;
+            border-bottom: 3px solid var(--dorado);
+            perspective: 900px;
+        }
+        header::before {
+            content: "";
+            position: absolute;
+            left: -25%; right: -25%; bottom: -60px;
+            height: 260px;
+            background:
+                repeating-linear-gradient(90deg, rgba(214,180,108,.22) 0 1px, transparent 1px 60px),
+                repeating-linear-gradient(0deg, rgba(214,180,108,.22) 0 1px, transparent 1px 40px);
+            transform: rotateX(68deg);
+            transform-origin: bottom;
+            mask-image: linear-gradient(to top, #000 10%, transparent 90%);
+            -webkit-mask-image: linear-gradient(to top, #000 10%, transparent 90%);
+            pointer-events: none;
+        }
+        header > * { position: relative; }
+        header h1 {
+            margin: 0 0 10px;
+            font-family: var(--serif);
+            font-weight: 900;
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            line-height: 1.1;
+            color: var(--dorado-claro);
+            letter-spacing: .5px;
+            text-shadow:
+                0 1px 0 var(--dorado),
+                0 2px 0 #b8964f,
+                0 3px 0 var(--dorado-oscuro),
+                0 4px 0 #6b5326,
+                0 5px 0 #54411d,
+                0 12px 22px rgba(0,0,0,.55);
+        }
+        header p { margin: 0; color: var(--texto-suave); font-size: 1.05rem; }
+        nav { margin-top: 22px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        nav a {
+            color: var(--texto);
+            text-decoration: none;
+            padding: 9px 22px;
+            border-radius: 999px;
+            border: 1px solid var(--linea);
+            background: rgba(24,36,56,.7);
+            box-shadow: 0 4px 0 #0a0f1a;
+            transition: transform .15s, box-shadow .15s, border-color .15s;
+        }
+        nav a:hover { border-color: var(--dorado); color: var(--dorado); }
+        nav a:active { transform: translateY(3px); box-shadow: 0 1px 0 #0a0f1a; }
+        nav a[aria-current="page"] {
+            background: var(--dorado);
+            color: var(--fondo);
+            font-weight: 700;
+            border-color: var(--dorado);
+            box-shadow: 0 4px 0 var(--dorado-oscuro);
+        }
+
+        main { max-width: 1040px; margin: 0 auto; padding: 44px 20px 70px; }
+
+        /* ---------- Filtros ---------- */
+        .filtros {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 44px;
+        }
+        .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+        .chip {
+            font-family: var(--sans);
+            background: var(--tarjeta);
+            color: var(--texto);
+            border: 1px solid var(--linea);
+            border-radius: 999px;
+            padding: 8px 20px;
+            font-size: .95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0a0f1a;
+            transition: transform .12s, box-shadow .12s, border-color .12s;
+        }
+        .chip:hover { border-color: var(--dorado); }
+        .chip:active { transform: translateY(3px); box-shadow: 0 1px 0 #0a0f1a; }
+        .chip.activo {
+            background: var(--dorado);
+            color: var(--fondo);
+            border-color: var(--dorado);
+            font-weight: 700;
+            box-shadow: 0 4px 0 var(--dorado-oscuro);
+        }
+        .chip.activo:active { box-shadow: 0 1px 0 var(--dorado-oscuro); }
+        .buscar {
+            font-family: var(--sans);
+            background: #0e1728;
+            color: var(--texto);
+            border: 1px solid var(--linea);
+            border-radius: 999px;
+            padding: 10px 20px;
+            font-size: .95rem;
+            min-width: 260px;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,.45);
+        }
+        .buscar::placeholder { color: var(--texto-suave); }
+
+        /* ---------- Bloque por año ---------- */
+        .anio { margin-bottom: 64px; }
+        .anio-cabecera {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px 24px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--linea);
+            padding-bottom: 14px;
+        }
+        .anio-numero {
+            font-family: var(--serif);
+            font-size: clamp(3rem, 9vw, 5rem);
+            font-weight: 900;
+            line-height: 1;
+            color: var(--dorado-claro);
+            text-shadow:
+                1px 1px 0 var(--dorado),
+                2px 2px 0 #b8964f,
+                3px 3px 0 var(--dorado-oscuro),
+                4px 4px 0 #6b5326,
+                5px 5px 0 #54411d,
+                6px 6px 0 #3d2f15,
+                10px 14px 24px rgba(0,0,0,.6);
+        }
+        .anio-info { color: var(--texto-suave); flex: 1; min-width: 180px; }
+        .anio-info a { text-decoration: none; font-weight: 700; }
+        .anio-info a:hover { text-decoration: underline; }
+
+        /* ---------- Tarjetas 3D ---------- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 26px;
+            perspective: 1100px;
+        }
+        
+        /* Enlace que envuelve la tarjeta para la inscripción en línea */
+        .enlace-tarjeta {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tarjeta {
+            --rx: 0deg;
+            --ry: 0deg;
+            --gx: 50%;
+            --gy: 50%;
+            position: relative;
+            background: linear-gradient(145deg, var(--tarjeta-2), var(--tarjeta));
+            border-radius: 14px;
+            border: 1px solid var(--linea);
+            border-left: 4px solid var(--dorado);
+            padding: 24px 22px 24px 22px;
+            transform-style: preserve-3d;
+            transform: rotateX(var(--rx)) rotateY(var(--ry));
+            transition: transform .25s ease-out, box-shadow .25s ease-out;
+            box-shadow:
+                0 1px 0 rgba(255,255,255,.06) inset,
+                0 14px 24px -10px rgba(0,0,0,.65);
+            will-change: transform;
+        }
+        .tarjeta::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(240px circle at var(--gx) var(--gy), rgba(240,219,165,.22), transparent 60%);
+            opacity: 0;
+            transition: opacity .25s;
+            pointer-events: none;
+        }
+        .tarjeta.inclinada {
+            transition: transform .06s linear, box-shadow .25s;
+            box-shadow:
+                0 1px 0 rgba(255,255,255,.08) inset,
+                0 30px 40px -14px rgba(0,0,0,.8),
+                0 0 0 1px rgba(214,180,108,.35);
+        }
+        .tarjeta.inclinada::after { opacity: 1; }
+
+        .tarjeta h3 {
+            margin: 0 0 8px;
+            font-family: var(--serif);
+            color: var(--dorado);
+            font-size: 1.3rem;
+            line-height: 1.25;
+            text-transform: capitalize;
+            transform: translateZ(34px);
+            text-shadow: 0 2px 6px rgba(0,0,0,.45);
+        }
+        .tarjeta p { margin: 0; color: var(--texto); font-size: .95rem; }
+        .tarjeta .desc { margin-bottom: 12px; transform: translateZ(18px); }
+        .tarjeta .edicion {
+            display: inline-block;
+            color: var(--texto-suave);
+            font-size: .85rem;
+            padding: 3px 12px;
+            border-radius: 999px;
+            background: rgba(11,18,32,.6);
+            border: 1px solid var(--linea);
+            transform: translateZ(26px);
+        }
+        
+        .cta-inscripcion {
+            display: inline-block;
+            margin-top: 14px;
+            color: var(--dorado-claro);
+            font-weight: 700;
+            font-size: 0.9rem;
+            transform: translateZ(30px);
+        }
+
+        .vacio { color: var(--texto-suave); text-align: center; padding: 40px 0; }
+        .volver {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .volver:hover { text-decoration: underline; }
+
+        footer {
+            background: var(--cabecera);
+            border-top: 1px solid var(--linea);
+            text-align: center;
+            padding: 26px 20px;
+            color: var(--texto-suave);
+        }
+        footer p { margin: 0; }
+
+        @media (max-width: 600px) {
+            .buscar { width: 100%; }
+            .grid { gap: 18px; }
+        }
+        @media (hover: none), (prefers-reduced-motion: reduce) {
+            .tarjeta, .tarjeta.inclinada { transform: none; }
+            .tarjeta::after { display: none; }
+            html { scroll-behavior: auto; }
+        }
+        /* ==================================
+   HEADER - FESTIVAL VALLENATO
+================================== */
+
+.encabezado-festival {
+    background: linear-gradient(
+        180deg,
+        #17243a 0%,
+        #131d2d 100%
+    );
+
+    border-bottom: 3px solid #d6b46c;
+    padding: 32px 30px 22px;
+    color: #ffffff;
+}
+
+/* CONTENEDOR */
+
+.header-contenido {
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+/* TÍTULO */
+
+.header-titulo {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.header-titulo h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    color: #f0dba5;
+    font-size: clamp(28px, 4vw, 42px);
+    margin: 0 0 8px;
+}
+
+.header-titulo p {
+    color: #c5cbd6;
+    font-size: 15px;
+    margin: 0;
+}
+
+/* NAVEGACIÓN */
+
+.header-navegacion {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+}
+
+.menu-principal {
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.menu-principal a {
+    display: inline-block;
+    text-decoration: none;
+    color: #f0dba5;
+    border: 1px solid #d6b46c;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.menu-principal a:hover {
+    background: #d6b46c;
+    color: #0b1220;
+    transform: translateY(-2px);
+}
+
+/* USUARIO */
+
+.header-usuario {
+    grid-column: 3;
+    justify-self: end;
+}
+
+.header-usuario form {
+    margin: 0;
+}
+
+.boton-salir {
+    display: inline-block;
+    text-decoration: none;
+    background: transparent;
+    color: #f0dba5;
+    border: 1px solid #d6b46c;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.boton-salir:hover {
+    background: #d6b46c;
+    color: #0b1220;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+
+    .encabezado-festival {
+        padding: 28px 15px;
+    }
+
+    .header-navegacion {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .menu-principal {
+        justify-content: center;
+    }
+
+    .header-usuario {
+        align-self: center;
+    }
+
+    .menu-principal a,
+    .boton-salir {
+        padding: 9px 15px;
+        font-size: 13px;
+    }
+}
+    </style>
+</head>
+<body>
+<header class="encabezado-festival">
+    <div class="header-contenido">
+
+        <div class="header-titulo">
+            <h1>Festival de la Leyenda Vallenata</h1>
+            <p>Tradición, cultura y pasión por nuestro folclor</p>
+        </div>
+
+        <div class="header-navegacion">
+
+            <nav class="menu-principal">
+                <a href="{% url 'lista_ediciones' %}">
+                    Ediciones
+                </a>
+
+                <a href="{% url 'lista_categorias' %}">
+                    Categorías
+                </a>
+
+                <a href="{% url 'lista_votaciones' %}">
+                    Votaciones
+                </a>
+            </nav>
+
+            <div class="header-usuario">
+                {% if user.is_authenticated %}
+
+                    <form method="POST"
+                          action="{% url 'cerrar_sesion' %}">
+                        {% csrf_token %}
+
+                        <button type="submit"
+                                class="boton-salir">
+                            Cerrar sesión
+                        </button>
+                    </form>
+
+                {% else %}
+
+                    <a href="{% url 'iniciar_sesion' %}"
+                       class="boton-salir">
+                        Iniciar sesión
+                    </a>
+
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</header>
+    
+
+    <main>
+        {% if categorias %}
+
+            {% regroup categorias by edicion as grupos %}
+
+            <div class="filtros">
+                <div class="chips" role="group" aria-label="Filtrar por edición">
+                    <button type="button" class="chip activo" data-anio="todos">Todas</button>
+                    {% for grupo in grupos %}
+                        <button type="button" class="chip" data-anio="{{ grupo.grouper.anio }}">{{ grupo.grouper.anio }}</button>
+                    {% endfor %}
+                </div>
+                <input type="search" class="buscar" id="buscar" placeholder="Buscar categoría..." aria-label="Buscar categoría">
+            </div>
+
+            {% for grupo in grupos %}
+                <section class="anio" data-anio="{{ grupo.grouper.anio }}">
+                    <div class="anio-cabecera">
+                        <span class="anio-numero">{{ grupo.grouper.anio }}</span>
+                        <span class="anio-info">
+                            {{ grupo.list|length }} categoría{{ grupo.list|length|pluralize }}
+                            · <a href="{% url 'detalle_edicion' grupo.grouper.pk %}">Ver edición</a>
+                        </span>
+                    </div>
+                    <div class="grid">
+                        {% for categoria in grupo.list %}
+                            <!-- Enlace que redirige inmediatamente al formulario de inscripción al hacer clic -->
+                            <a href="{% url 'votacion_categoria' categoria.id_categoria %}" class="enlace-tarjeta">
+                                <article class="tarjeta">
+                                    <h3>{{ categoria.nombre }}</h3>
+                                    {% if categoria.descripcion %}<p class="desc">{{ categoria.descripcion }}</p>{% endif %}
+                                    <p class="edicion">Edición: {{ grupo.grouper.anio }}</p>
+                                    <div class="cta-inscripcion">Ver votación &rarr;</div>
+                                </article>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+
+            <p class="vacio" id="sin-resultados" hidden>No se encontraron categorías con ese filtro.</p>
+
+        {% else %}
+            <p class="vacio">Aún no hay categorías registradas. Agrégalas desde el panel de administración.</p>
+        {% endif %}
+
+        <a class="volver" href="{% url 'lista_ediciones' %}">&larr; Volver al inicio</a>
+    </main>
+
+    <footer>
+        <p>Fundación Festival de la Leyenda Vallenata &middot; Valledupar, Colombia</p>
+    </footer>
+
+    <script>
+        (function () {
+            var chips = document.querySelectorAll('.chip');
+            var bloques = document.querySelectorAll('.anio');
+            var buscar = document.getElementById('buscar');
+            var vacio = document.getElementById('sin-resultados');
+
+            if (buscar) {
+                var anioActivo = 'todos';
+
+                function filtrar() {
+                    var texto = buscar.value.trim().toLowerCase();
+                    var visibles = 0;
+
+                    bloques.forEach(function (bloque) {
+                        var coincideAnio = anioActivo === 'todos' || bloque.dataset.anio === anioActivo;
+                        var tarjetasVisibles = 0;
+
+                        bloque.querySelectorAll('.enlace-tarjeta').forEach(function (enlace) {
+                            var ok = enlace.textContent.toLowerCase().indexOf(texto) !== -1;
+                            enlace.hidden = !ok;
+                            if (ok) tarjetasVisibles++;
+                        });
+
+                        var mostrar = coincideAnio && tarjetasVisibles > 0;
+                        bloque.hidden = !mostrar;
+                        if (mostrar) visibles++;
+                    });
+
+                    vacio.hidden = visibles > 0;
+                }
+
+                chips.forEach(function (chip) {
+                    chip.addEventListener('click', function () {
+                        chips.forEach(function (c) { c.classList.remove('activo'); });
+                        chip.classList.add('activo');
+                        anioActivo = chip.dataset.anio;
+                        filtrar();
+                    });
+                });
+
+                buscar.addEventListener('input', filtrar);
+            }
+
+            var puedeInclinar = window.matchMedia('(hover: hover)').matches &&
+                                !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (!puedeInclinar) return;
+
+            var MAX = 10;
+
+            document.querySelectorAll('.tarjeta').forEach(function (t) {
+                t.addEventListener('mousemove', function (e) {
+                    var r = t.getBoundingClientRect();
+                    var x = (e.clientX - r.left) / r.width;
+                    var y = (e.clientY - r.top) / r.height;
+                    t.style.setProperty('--ry', ((x - 0.5) * 2 * MAX).toFixed(2) + 'deg');
+                    t.style.setProperty('--rx', ((0.5 - y) * 2 * MAX).toFixed(2) + 'deg');
+                    t.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
+                    t.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
+                    t.classList.add('inclinada');
+                });
+                t.addEventListener('mouseleave', function () {
+                    t.classList.remove('inclinada');
+                    t.style.setProperty('--rx', '0deg');
+                    t.style.setProperty('--ry', '0deg');
+                });
+            });
+        })();
+    </script>
+
+</body>
+</html>
