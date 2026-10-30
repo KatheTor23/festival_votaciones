@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis votaciones | Festival Vallenato</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --fondo: #0b1220;
+            --tarjeta: #182438;
+            --dorado: #d6b46c;
+            --dorado-claro: #f0dba5;
+            --texto: #ffffff;
+            --suave: #c5cbd6;
+            --borde: #2a3a57;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(
+                circle at top left,
+                #1c2b43,
+                var(--fondo) 55%
+            );
+            color: var(--texto);
+            font-family: "Nunito Sans", Arial, sans-serif;
+        }
+
+        header {
+            background: #131d2d;
+            border-bottom: 3px solid var(--dorado);
+            padding: 38px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: "Playfair Display", Georgia, serif;
+            color: var(--dorado-claro);
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin: 0 0 10px;
+        }
+
+        header p {
+            color: var(--suave);
+            margin: 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            background: var(--tarjeta);
+            border: 1px solid var(--borde);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
+        nav a:hover,
+        nav a.actual {
+            background: var(--dorado);
+            color: var(--fondo);
+        }
+
+        main {
+            max-width: 1050px;
+            margin: auto;
+            padding: 50px 20px 75px;
+        }
+
+        .encabezado {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .encabezado h2 {
+            color: var(--dorado-claro);
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 2rem;
+        }
+
+        .encabezado p {
+            color: var(--suave);
+        }
+
+        .contador {
+            display: inline-block;
+            padding: 10px 20px;
+            border: 1px solid var(--dorado);
+            border-radius: 30px;
+            color: var(--dorado-claro);
+            font-weight: 700;
+            margin-top: 12px;
+        }
+
+        .lista-votos {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(min(100%, 310px), 1fr)
+            );
+            gap: 22px;
+        }
+
+        .tarjeta-voto {
+            background: linear-gradient(
+                145deg, #20314c, var(--tarjeta)
+            );
+            border: 1px solid var(--borde);
+            border-left: 4px solid var(--dorado);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 12px 28px rgba(0,0,0,.25);
+        }
+
+        .etiqueta {
+            display: inline-block;
+            background: rgba(214,180,108,.12);
+            color: var(--dorado-claro);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .tarjeta-voto h3 {
+            font-family: "Playfair Display", Georgia, serif;
+            color: var(--dorado);
+            font-size: 1.4rem;
+            margin: 0 0 18px;
+        }
+
+        .detalle {
+            color: var(--suave);
+            margin: 12px 0;
+            line-height: 1.7;
+        }
+
+        .detalle strong {
+            color: white;
+        }
+
+        .estado {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--borde);
+            color: #a7e3b3;
+            font-weight: 700;
+        }
+
+        .sin-votos {
+            text-align: center;
+            padding: 50px 25px;
+            border: 1px solid var(--borde);
+            background: var(--tarjeta);
+            border-radius: 16px;
+            color: var(--suave);
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 13px 25px;
+            background: var(--dorado);
+            color: var(--fondo);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 800;
+            box-shadow: 0 4px 0 #8a6d32;
+        }
+
+        .boton:hover {
+            background: var(--dorado-claro);
+        }
+
+        .acciones {
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            background: #131d2d;
+            border-top: 1px solid var(--borde);
+            color: var(--suave);
+            padding: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Festival de la Leyenda Vallenata</h1>
+    <p>Consulta tu historial de participación</p>
+
+    <nav>
+        <a href="{% url 'lista_ediciones' %}">Ediciones</a>
+        <a href="{% url 'lista_categorias' %}">Categorías</a>
+        <a href="{% url 'lista_votaciones' %}">Votaciones</a>
+        <a href="{% url 'mis_votaciones' %}" class="actual">Mis votos</a>
+    </nav>
+</header>
+
+<main>
+
+    <section class="encabezado">
+        <h2>Mis votaciones</h2>
+
+        <p>
+            Aquí puedes consultar las categorías
+            en las que has participado y tus elecciones.
+        </p>
+
+        <div class="contador">
+            Votos registrados: {{ votos|length }}
+        </div>
+    </section>
+
+    {% if votos %}
+
+        <section class="lista-votos">
+
+            {% for voto in votos %}
+
+                <article class="tarjeta-voto">
+
+                    <span class="etiqueta">
+                        Edición {{ voto.votacion.categoria.edicion.anio }}
+                    </span>
+
+                    <h3>
+                        {{ voto.votacion.categoria.nombre }}
+                    </h3>
+
+                    <p class="detalle">
+                        <strong>Participante elegido:</strong>
+                        {{ voto.opcion.nombre_participante }}
+                    </p>
+
+                    <p class="detalle">
+                        <strong>Fecha del voto:</strong>
+                        {{ voto.fecha_hora|date:"d/m/Y" }}
+                    </p>
+
+                    <p class="detalle">
+                        <strong>Hora:</strong>
+                        {{ voto.fecha_hora|date:"h:i A" }}
+                    </p>
+
+                    <div class="estado">
+                        ✓ Voto registrado correctamente
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </section>
+
+    {% else %}
+
+        <div class="sin-votos">
+            <h3>Todavía no has registrado ningún voto</h3>
+            <p>
+                Explora las categorías del festival
+                y participa en las votaciones disponibles.
+            </p>
+        </div>
+
+    {% endif %}
+
+    <div class="acciones">
+        <a href="{% url 'lista_categorias' %}" class="boton">
+            Explorar categorías
+        </a>
+    </div>
+
+</main>
+
+<footer>
+    Fundación Festival de la Leyenda Vallenata · Valledupar, Colombia
+</footer>
+
+</body>
+</html>

@@ -14,4 +14,9 @@ urlpatterns = [
         views.votacion_categoria,
         name="votacion_categoria"
     ),
+    path(
+    "mis-votaciones/",
+    views.mis_votaciones,
+    name="mis_votaciones"
+    ),
 ]

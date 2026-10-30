@@ -3,6 +3,17 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from .models import Categoria, Votacion, Opcion
 
+# Improtaciones para la mostra mensjaes, valdiar el voto,
+# controlar los errores MYSQL y poder utlizar el formulario recien creado.
+
+from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
+from django.shortcuts import redirect
+
+from .forms import VotoForm
+from .models import Voto
+
 
 def lista_votaciones(request):
     votaciones = Votacion.objects.select_related(
@@ -45,12 +56,78 @@ def votacion_categoria(request, id_categoria):
         categoria=categoria
     ).first()
 
-    participantes = []
+    participantes = (
+        Opcion.objects.filter(votacion=votacion)
+        if votacion else Opcion.objects.none()
+    )
+
+    ya_voto = False
+    abierta = False
+    formulario = None
 
     if votacion:
-        participantes = Opcion.objects.filter(
+        abierta = votacion.esta_abierta()
+
+        ya_voto = Voto.objects.filter(
+            usuario=request.user,
             votacion=votacion
-        )
+        ).exists()
+
+        if request.method == "POST":
+
+            if ya_voto:
+                messages.error(
+                    request,
+                    "Ya registraste tu voto en esta categoría."
+                )
+
+            elif not abierta:
+                messages.error(
+                    request,
+                    "Esta votación no está abierta."
+                )
+
+            else:
+                formulario = VotoForm(
+                    request.POST,
+                    votacion=votacion
+                )
+
+                if formulario.is_valid():
+                    opcion = formulario.cleaned_data["opcion"]
+
+                    try:
+                        with transaction.atomic():
+                            Voto.objects.create(
+                                usuario=request.user,
+                                votacion=votacion,
+                                opcion=opcion
+                            )
+
+                    except IntegrityError:
+                        messages.error(
+                            request,
+                            "Ya existe un voto registrado para esta categoría."
+                        )
+
+                    except ValidationError as error:
+                        messages.error(
+                            request,
+                            "; ".join(error.messages)
+                        )
+
+                    else:
+                        messages.success(
+                            request,
+                            "¡Tu voto se registró correctamente!"
+                        )
+                        return redirect(
+                            "votacion_categoria",
+                            id_categoria=categoria.pk
+                        )
+
+        if formulario is None:
+            formulario = VotoForm(votacion=votacion)
 
     return render(
         request,
@@ -58,6 +135,29 @@ def votacion_categoria(request, id_categoria):
         {
             "categoria": categoria,
             "votacion": votacion,
-            "participantes": participantes
+            "participantes": participantes,
+            "formulario": formulario,
+            "ya_voto": ya_voto,
+            "abierta": abierta,
         }
+    )
+
+    # HISTORIAL DE VOTACIONES DEL USUARIO
+
+@login_required
+def mis_votaciones(request):
+
+    votos = Voto.objects.filter(
+        usuario=request.user
+    ).select_related(
+        "opcion",
+        "votacion",
+        "votacion__categoria",
+        "votacion__categoria__edicion"
+    ).order_by("-fecha_hora")
+
+    return render(
+        request,
+        "votaciones/mis_votaciones.html",
+        {"votos": votos}
     )
