@@ -19,4 +19,11 @@ urlpatterns = [
     views.mis_votaciones,
     name="mis_votaciones"
     ),
+
+    # para Json
+    path(
+    "api/categorias/",
+    views.api_categorias,
+    name="api_categorias"
+),
 ]

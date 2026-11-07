@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from .models import Categoria, Votacion, Opcion
 
+# para Json
+from django.http import JsonResponse
+
 # Improtaciones para la mostra mensjaes, valdiar el voto,
 # controlar los errores MYSQL y poder utlizar el formulario recien creado.
 
@@ -161,3 +164,55 @@ def mis_votaciones(request):
         "votaciones/mis_votaciones.html",
         {"votos": votos}
     )
+
+# API GET - CONSULTAR CATEGORÍAS Y PARTICIPANTES
+
+def api_categorias(request):
+
+    if request.method != "GET":
+        return JsonResponse(
+            {"error": "Método no permitido. Utiliza GET."},
+            status=405
+        )
+
+    categorias = Categoria.objects.select_related(
+        "edicion"
+    ).prefetch_related(
+        "votacion__opciones"
+    ).all()
+
+    datos = []
+
+    for categoria in categorias:
+
+        votacion = getattr(categoria, "votacion", None)
+
+        participantes = []
+
+        if votacion:
+            for opcion in votacion.opciones.all():
+                participantes.append({
+                    "id": opcion.id_opcion,
+                    "nombre": opcion.nombre_participante,
+                    "descripcion": opcion.descripcion
+                })
+
+        datos.append({
+            "id": categoria.id_categoria,
+            "nombre": categoria.nombre,
+            "descripcion": categoria.descripcion,
+            "edicion": {
+                "id": categoria.edicion.id_edicion,
+                "nombre": categoria.edicion.nombre,
+                "anio": categoria.edicion.anio
+            },
+            "participantes": participantes
+        })
+
+    return JsonResponse(
+    {"categorias": datos},
+    json_dumps_params={
+        "ensure_ascii": False,
+        "indent": 4
+    }
+)

@@ -184,11 +184,16 @@ class Voto(models.Model):
         if not self.votacion_id or not self.opcion_id:
             return
 
+        # Validación, impedir que se selecciones participantes de otra
+        # votación
+
         if self.opcion.votacion_id != self.votacion_id:
             raise ValidationError(
                 "La opción seleccionada no pertenece "
                 "a esta votación."
             )
+
+        # Validación, impedir votar cuando la votación está cerrada
 
         if self._state.adding and not self.votacion.esta_abierta():
             raise ValidationError(
@@ -207,6 +212,7 @@ class Voto(models.Model):
         verbose_name_plural = "Votos"
 
 #Lo siguiente lo implmentamos pr evitar una segunda votación en una misma categoria 
+# validación de evitar votos duplicados
         constraints = [
             models.UniqueConstraint(
                 fields=["usuario", "votacion"],
