@@ -165,108 +165,62 @@ La implementación se encuentra en:
 
 La ruta debe comprobarse en la configuración principal antes de utilizarla en la entrega.
 
-Validaciones y seguridad
+## Validaciones y seguridad
 
 El sistema incorpora diferentes mecanismos para proteger el proceso de votación:
 
-Autenticación requerida para registrar votos y consultar el historial personal.
+- Autenticación requerida para registrar votos y consultar el historial personal.
+- Protección CSRF en formularios.
+- Validación de opciones pertenecientes a la votación.
+- Verificación del estado abierto o cerrado de las votaciones.
+- Prevención de votos duplicados.
+- Restricción `UniqueConstraint` sobre usuario y votación.
+- Uso de transacciones atómicas para el registro de votos.
+- Manejo de errores de integridad y validación.
+- Uso de variables de entorno para proteger la clave secreta de Django.
 
-Protección CSRF en formularios.
-
-Validación de opciones pertenecientes a la votación.
-
-Verificación del estado abierto o cerrado de las votaciones.
-
-Prevención de votos duplicados.
-
-Restricción UniqueConstraint sobre usuario y votación.
-
-Uso de transacciones atómicas para el registro de votos.
-
-Manejo de errores de integridad y validación.
-
-Uso de variables de entorno para proteger la clave secreta de Django.
-
-Pruebas funcionales
+## Pruebas funcionales
 
 Se realizaron pruebas sobre los siguientes escenarios:
 
-Código
+| Código | Escenario |
+|---|---|
+| CP01 | Registro de voto válido |
+| CP02 | Rechazo de voto duplicado |
+| CP03 | Voto permitido en otra categoría |
+| CP04 | Restricción a usuarios no autenticados |
+| CP05 | Rechazo de voto en categoría cerrada |
+| CP06 | Rechazo de opción de otra votación |
+| CP07 | Consulta del historial personal |
+| CP08 | Verificación de registros en administración y MySQL |
+| CP09 | Prueba de concurrencia para evitar duplicados |
+| CP10 | Consulta GET de categorías en formato JSON |
 
-Escenario
-
-CP01
-
-Registro de voto válido
-
-CP02
-
-Rechazo de voto duplicado
-
-CP03
-
-Voto permitido en otra categoría
-
-CP04
-
-Restricción a usuarios no autenticados
-
-CP05
-
-Rechazo de voto en categoría cerrada
-
-CP06
-
-Rechazo de opción de otra votación
-
-CP07
-
-Consulta del historial personal
-
-CP08
-
-Verificación de registros en administración y MySQL
-
-CP09
-
-Prueba de concurrencia para evitar duplicados
-
-CP10
-
-Consulta GET de categorías en formato JSON
-
-La prueba CP09 se realizó mediante operaciones concurrentes sobre el modelo Voto, utilizando hilos de ejecución y verificando que solamente se registrara un voto.
+La prueba CP09 se realizó mediante operaciones concurrentes sobre el modelo `Voto`, utilizando hilos de ejecución y verificando que solamente se registrara un voto.
 
 Las evidencias y resultados se documentan en el informe académico de la entrega.
 
-Archivos importantes
+## Archivos importantes
 
-votaciones/models.py: modelos y restricción de unicidad.
+- `votaciones/models.py`: modelos y restricción de unicidad.
+- `votaciones/forms.py`: formulario y validación de opciones.
+- `votaciones/views.py`: registro de votos, validaciones, historial y API.
+- `votaciones/urls.py`: rutas de votaciones.
+- `festival/settings.py`: configuración general del proyecto.
+- `requirements.txt`: dependencias necesarias para ejecutar la aplicación.
 
-votaciones/forms.py: formulario y validación de opciones.
-
-votaciones/views.py: registro de votos, validaciones, historial y API.
-
-votaciones/urls.py: rutas de votaciones.
-
-festival/settings.py: configuración general del proyecto.
-
-requirements.txt: dependencias necesarias para ejecutar la aplicación.
-
-Estado del proyecto
+## Estado del proyecto
 
 Proyecto académico correspondiente a la tercera entrega del desarrollo de una aplicación web con Django y MySQL.
 
 Se encuentran implementadas las funcionalidades principales de autenticación, gestión de categorías, registro y validación de votos, historial personal y consulta de información mediante API GET.
 
-Autoría
+## Autoría
 
 Proyecto desarrollado como parte de una actividad académica de desarrollo web con Django.
 
-Integrantes del grupo:
+**Integrantes del grupo:**
 
-Jenny Katherine Torres Castro
-
-Jhonatan Rendón Diaz
-
-Paula Andrea Hurtado Espitia
+- Jenny Katherine Torres Castro
+- Jhonatan Rendón Diaz
+- Paula Andrea Hurtado Espitia
